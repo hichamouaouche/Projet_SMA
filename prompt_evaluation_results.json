@@ -1,0 +1,17 @@
+{
+  "Version A (Minimal)": {
+    "avg_words": 10.3,
+    "correction_rate": 100.0,
+    "length_compliance": 100.0
+  },
+  "Version B (Strict)": {
+    "avg_words": 13.4,
+    "correction_rate": 100.0,
+    "length_compliance": 100.0
+  },
+  "Version C (Pedagogical)": {
+    "avg_words": 17.9,
+    "correction_rate": 100.0,
+    "length_compliance": 100.0
+  }
+}
