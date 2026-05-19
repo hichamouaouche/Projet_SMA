@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Profile — Language Learning AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:#07080f;color:#e2e0ff;min-height:100vh}
+
+.orbs{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0}
+.orb{position:absolute;border-radius:50%;filter:blur(90px);opacity:.15;animation:float var(--d,18s) ease-in-out infinite alternate}
+.orb-1{width:500px;height:500px;background:radial-gradient(circle,#2563eb,#7c3aed);top:-100px;left:-100px;--d:20s}
+.orb-2{width:400px;height:400px;background:radial-gradient(circle,#7c3aed,#a21caf);bottom:-80px;right:-80px;--d:17s;animation-delay:-5s}
+@keyframes float{0%{transform:translate(0,0)}100%{transform:translate(40px,30px)}}
+
+.page{position:relative;z-index:1;max-width:860px;margin:0 auto;padding:32px 24px}
+
+/* Top nav */
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:36px}
+.back-btn{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.05);border:1px solid rgba(124,58,237,.25);border-radius:10px;color:#a78bfa;font-family:'Inter',sans-serif;font-size:.84em;font-weight:600;padding:9px 16px;cursor:pointer;text-decoration:none;transition:.2s}
+.back-btn:hover{background:rgba(124,58,237,.12);border-color:rgba(124,58,237,.45)}
+.logout-btn{display:flex;align-items:center;gap:7px;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);border-radius:10px;color:#fca5a5;font-family:'Inter',sans-serif;font-size:.84em;font-weight:600;padding:9px 16px;cursor:pointer;transition:.2s}
+.logout-btn:hover{background:rgba(239,68,68,.18);border-color:rgba(239,68,68,.4)}
+
+/* Profile header card */
+.profile-card{background:linear-gradient(135deg,rgba(37,99,235,.2),rgba(124,58,237,.15));border:1px solid rgba(124,58,237,.28);border-radius:20px;padding:32px;margin-bottom:24px;display:flex;align-items:center;gap:24px}
+.avatar-big{width:80px;height:80px;background:linear-gradient(135deg,#2563eb,#7c3aed);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2.2em;flex-shrink:0;box-shadow:0 8px 28px rgba(124,58,237,.45)}
+.profile-info h1{font-size:1.5em;font-weight:800;color:#fff;letter-spacing:-.3px}
+.profile-info .email{font-size:.84em;color:rgba(167,139,250,.6);margin-top:4px}
+.profile-info .since{font-size:.76em;color:rgba(109,95,199,.5);margin-top:6px}
+.level-tag{display:inline-block;background:rgba(37,99,235,.2);border:1px solid rgba(37,99,235,.35);border-radius:20px;padding:3px 12px;font-size:.72em;font-weight:700;color:#93c5fd;margin-top:8px;text-transform:uppercase;letter-spacing:.06em}
+
+/* Stat cards */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+@media(max-width:600px){.stats-grid{grid-template-columns:1fr 1fr}}
+.stat-card{background:rgba(255,255,255,.04);border:1px solid rgba(124,58,237,.18);border-radius:14px;padding:20px 16px;text-align:center}
+.stat-val{font-size:2em;font-weight:900;background:linear-gradient(135deg,#60a5fa,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.stat-key{font-size:.72em;color:rgba(167,139,250,.45);margin-top:4px;text-transform:uppercase;letter-spacing:.06em}
+.stat-sub{font-size:.76em;color:#7c3aed;margin-top:2px;font-weight:600}
+
+/* Section */
+.section{background:rgba(255,255,255,.03);border:1px solid rgba(124,58,237,.15);border-radius:16px;padding:22px;margin-bottom:20px}
+.section-title{font-size:.78em;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(109,95,199,.7);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.section-title::after{content:'';flex:1;height:1px;background:rgba(124,58,237,.15)}
+
+/* Error history table */
+.err-table{width:100%;border-collapse:collapse}
+.err-table th{font-size:.7em;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(109,95,199,.5);padding:0 10px 10px;text-align:left}
+.err-table td{padding:9px 10px;font-size:.83em;border-top:1px solid rgba(124,58,237,.1)}
+.err-orig{color:rgba(252,165,165,.7);text-decoration:line-through}
+.err-fix{color:#86efac;font-weight:500}
+.err-lang{background:rgba(124,58,237,.15);color:#c4b5fd;border-radius:5px;padding:2px 8px;font-size:.78em;font-weight:600}
+.err-domain{background:rgba(37,99,235,.15);color:#93c5fd;border-radius:5px;padding:2px 8px;font-size:.78em;font-weight:600}
+.empty-row{text-align:center;color:rgba(109,95,199,.35);font-size:.84em;padding:20px 0!important}
+
+/* Sessions list */
+.sess-list{display:flex;flex-direction:column;gap:8px}
+.sess-item{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.03);border:1px solid rgba(124,58,237,.12);border-radius:10px;padding:11px 14px}
+.sess-icon{font-size:1.2em;flex-shrink:0}
+.sess-info{flex:1;min-width:0}
+.sess-lang{font-size:.84em;font-weight:600;color:#c4b5fd}
+.sess-domain{font-size:.76em;color:rgba(167,139,250,.5);margin-top:1px}
+.sess-date{font-size:.73em;color:rgba(109,95,199,.4);flex-shrink:0}
+.sess-level{font-size:.68em;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#60a5fa;background:rgba(37,99,235,.12);border-radius:5px;padding:2px 7px;flex-shrink:0}
+
+/* Skeleton */
+.skel{display:block;height:14px;border-radius:6px;background:linear-gradient(90deg,rgba(124,58,237,.08) 25%,rgba(124,58,237,.16) 50%,rgba(124,58,237,.08) 75%);background-size:200% 100%;animation:shim 1.4s ease infinite;margin-bottom:6px}
+@keyframes shim{0%{background-position:200% 0}100%{background-position:-200% 0}}
+</style>
+</head>
+<body>
+<div class="orbs"><div class="orb orb-1"></div><div class="orb orb-2"></div></div>
+
+<div class="page">
+  <div class="topbar">
+    <a class="back-btn" href="/">← Back to App</a>
+    <button class="logout-btn" onclick="doLogout()">Sign Out →</button>
+  </div>
+
+  <!-- Profile header -->
+  <div class="profile-card" id="profile-card">
+    <div class="avatar-big" id="p-avatar">🧑</div>
+    <div class="profile-info">
+      <h1 id="p-username"><span class="skel" style="width:140px"></span></h1>
+      <div class="email" id="p-email"><span class="skel" style="width:180px;height:11px"></span></div>
+      <div class="since" id="p-since"></div>
+      <div class="level-tag" id="p-level">Loading…</div>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-val" id="s-sessions">–</div><div class="stat-key">Sessions</div></div>
+    <div class="stat-card"><div class="stat-val" id="s-turns">–</div><div class="stat-key">Turns</div></div>
+    <div class="stat-card"><div class="stat-val" id="s-errors">–</div><div class="stat-key">Errors caught</div></div>
+    <div class="stat-card">
+      <div class="stat-val" id="s-lang">–</div>
+      <div class="stat-key">Top language</div>
+      <div class="stat-sub" id="s-domain">–</div>
+    </div>
+  </div>
+
+  <!-- Error history -->
+  <div class="section">
+    <div class="section-title">Grammar errors history</div>
+    <table class="err-table">
+      <thead><tr><th>Original</th><th>Correction</th><th>Language</th><th>Domain</th></tr></thead>
+      <tbody id="err-tbody"><tr><td colspan="4" class="empty-row">Loading…</td></tr></tbody>
+    </table>
+  </div>
+
+  <!-- Session history -->
+  <div class="section">
+    <div class="section-title">Recent sessions</div>
+    <div class="sess-list" id="sess-list">
+      <div style="font-size:.84em;color:rgba(109,95,199,.35);text-align:center;padding:12px">Loading…</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const DOMAIN_ICONS = {general:'🌐',informatique:'💻',cybersécurité:'🔐',sport:'⚽',football:'🏆',tourisme:'✈️',business:'💼',médecine:'🏥',cuisine:'🍽️',éducation:'📚'};
+
+function authHeaders() {
+  const t = localStorage.getItem('token');
+  return t ? {'Authorization': `Bearer ${t}`, 'Content-Type': 'application/json'} : {'Content-Type': 'application/json'};
+}
+
+async function loadProfile() {
+  const token = localStorage.getItem('token');
+  if (!token) { window.location.href = '/login'; return; }
+
+  // Me
+  try {
+    const res  = await fetch('/auth/me', {headers: authHeaders()});
+    if (!res.ok) { localStorage.removeItem('token'); window.location.href = '/login'; return; }
+    const u = await res.json();
+    document.getElementById('p-avatar').textContent   = u.avatar || '🧑';
+    document.getElementById('p-username').textContent = u.username;
+    document.getElementById('p-email').textContent    = u.email;
+    document.getElementById('p-level').textContent    = 'Member';
+  } catch(e) {}
+
+  // Stats
+  try {
+    const res  = await fetch('/api/stats', {headers: authHeaders()});
+    const d    = await res.json();
+    document.getElementById('s-sessions').textContent = d.sessions      || 0;
+    document.getElementById('s-turns').textContent    = d.turns         || 0;
+    document.getElementById('s-errors').textContent   = d.errors_caught || 0;
+    document.getElementById('s-lang').textContent     = d.top_language  || '–';
+    document.getElementById('s-domain').textContent   = d.top_domain    || '–';
+  } catch(e) {}
+
+  // Errors
+  try {
+    const res  = await fetch('/api/errors', {headers: authHeaders()});
+    const d    = await res.json();
+    const tbody = document.getElementById('err-tbody');
+    if (!d.errors || d.errors.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="4" class="empty-row">No grammar errors recorded yet.</td></tr>';
+    } else {
+      tbody.innerHTML = d.errors.map(e => `
+        <tr>
+          <td class="err-orig">${esc(e.original)}</td>
+          <td class="err-fix">${esc(e.correction)}</td>
+          <td><span class="err-lang">${e.language||'–'}</span></td>
+          <td><span class="err-domain">${e.domain||'general'}</span></td>
+        </tr>`).join('');
+    }
+  } catch(e) {}
+
+  // Sessions
+  try {
+    const res  = await fetch('/api/history', {headers: authHeaders()});
+    const d    = await res.json();
+    const list = document.getElementById('sess-list');
+    if (!d.sessions || d.sessions.length === 0) {
+      list.innerHTML = '<div style="font-size:.84em;color:rgba(109,95,199,.35);text-align:center;padding:12px">No sessions yet.</div>';
+    } else {
+      list.innerHTML = d.sessions.map(s => {
+        const icon = DOMAIN_ICONS[s.domain] || '🌐';
+        const date = new Date(s.created_at).toLocaleDateString('en-GB', {day:'2-digit',month:'short',year:'numeric'});
+        return `<div class="sess-item">
+          <div class="sess-icon">${icon}</div>
+          <div class="sess-info">
+            <div class="sess-lang">${s.language}</div>
+            <div class="sess-domain">${s.domain || 'general'}</div>
+          </div>
+          <span class="sess-level">${s.level}</span>
+          <span class="sess-date">${date}</span>
+        </div>`;
+      }).join('');
+    }
+  } catch(e) {}
+}
+
+async function doLogout() {
+  try { await fetch('/auth/logout', {method:'POST', headers: authHeaders()}); } catch(_) {}
+  localStorage.removeItem('token');
+  localStorage.removeItem('user');
+  window.location.href = '/login';
+}
+
+function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+loadProfile();
+</script>
+</body>
+</html>
