@@ -1,140 +1,150 @@
-# Language Learning AI - Multi-Agent System
+# Language Learning AI — Multi-Agent System
 
-## Description
+An intelligent language-learning platform powered by a multi-agent architecture. The system places the user inside a realistic conversation scenario, then corrects grammar, checks cultural appropriateness, and formats the full response — all orchestrated automatically via **LangGraph**.
 
-An intelligent multi-agent ecosystem for interactive language learning. The system simulates real-world conversational situations, corrects grammar, checks cultural appropriateness, and formats responses — all orchestrated autonomously via LangGraph.
+---
 
 ## Features
 
-### 1. Agent Workflow & Orchestration (LangGraph)
-- **5 specialized agents** working in parallel and sequential pipelines
-- **Hybrid orchestration**: character + teacher run in parallel, then merge into mentality, then styler
-- State management via `StateGraph` with typed `WorkflowState`
+| Feature | Description |
+|---|---|
+| Multi-agent workflow | Six specialised agents running in parallel and sequential pipelines |
+| RAG grammar correction | BM25 retrieval over a grammar PDF knowledge base |
+| Cultural check | Detects culturally inappropriate phrasing for the target language |
+| Human-in-the-Loop | User decides whether to save each corrected response to disk |
+| Web UI | Real-time Streamlit interface with chat history and save button |
+| CLI mode | Lightweight terminal interface for offline use |
+| Prompt evaluation | A/B/C testing framework with automatic best-version recommendation |
+| Multi-language | French, Spanish, German, Italian, Arabic |
 
-### 2. RAG (Retrieval-Augmented Generation)
-- PDF-based knowledge base loaded from `files/Grammer.pdf`
-- FAISS vector store with HuggingFace embeddings (`all-MiniLM-L6-v2`)
-- Chunking via `RecursiveCharacterTextSplitter`
-- Retriever tool available for agents to access grammar rules dynamically
-
-### 3. Human-in-the-Loop (HITL)
-- Interactive save checkpoint after each response (`save_check` node)
-- User decides whether to persist corrections to disk
-- Streamlit UI save button for manual content preservation
-
-### 4. Prompt Evaluation (A/B Testing)
-- `prompt_evaluation.py` compares 3 prompt versions on 10 test sentences
-- Metrics: correction rate, word count compliance, average response length
-- Results exported to JSON with automatic best-version recommendation
-
-### 5. Web UI (Streamlit)
-- Real-time chat interface
-- Language selection (French, Spanish, German, Italian, Arabic)
-- New situation generation, chat history, save functionality
-- Clean markdown-formatted responses
+---
 
 ## Architecture
 
 ```
 START
-  ├── character (ReAct agent + web search)
-  └── teacher (grammar correction)
-        ↓
-    mentality (cultural check)
-        ↓
-    styler (markdown formatting)
-        ↓
-    save_check (human-in-the-loop)
-        ↓
-    save_agent (optional) → END
+  ├─── character (human-like response with emotion)
+  └─── teacher   (grammar correction via RAG)
+            ↓
+       mentality  (cultural appropriateness check)
+            ↓
+        styler    (markdown formatting)
+            ↓
+      save_check  (human-in-the-loop — CLI only)
+            ↓
+      save_agent  (persist to disk if approved)
+            ↓
+          END
 ```
 
 ### Agents
 
 | Agent | Role | Tools |
 |---|---|---|
-| `situational` | Generates real-life conversation scenarios | Tavily web search |
-| `character` | Responds as a human with emotions | Tavily web search |
-| `teacher` | Corrects grammar errors | (RAG retriever) |
-| `mentality` | Checks cultural appropriateness | Tavily web search |
-| `styler` | Formats output in clean markdown | Tavily web search |
-| `save_agent` | Persists corrections to disk | None |
+| `situational` | Generates a realistic conversation scenario | Web search |
+| `character` | Responds as a human with emotion | Web search |
+| `teacher` | Corrects grammar errors | Grammar PDF (BM25 RAG) |
+| `mentality` | Flags cultural issues | Web search |
+| `styler` | Formats the final output in markdown | Web search |
+| `save_agent` | Persists approved corrections to disk | — |
+
+---
 
 ## Tech Stack
 
-- **LangGraph** — Agent orchestration and workflow
-- **LangChain** — Agent creation, tools, chains
-- **Ollama** — Local LLM inference
-- **Tavily API** — Web search tool
-- **FAISS** — Vector store for RAG
-- **ChromaDB** — Alternative vector store
-- **HuggingFace Embeddings** — Text embeddings (`all-MiniLM-L6-v2`)
-- **Streamlit** — Web UI
-- **PyPDFLoader** — PDF document loading
-- **LangSmith** — Tracing and evaluation
+| Layer | Technology |
+|---|---|
+| Agent orchestration | LangGraph |
+| Agent framework | LangChain |
+| LLM inference | Ollama (remote or local) |
+| RAG retrieval | BM25 (`rank-bm25`) over PyPDF-loaded document |
+| Web search | Tavily API |
+| Web UI | Streamlit |
+| Tracing (optional) | LangSmith |
 
-## Installation
-
-```bash
-# Clone or copy the project
-cd PythonProject6
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Create .env file with your API keys
-echo "modelName=your-ollama-model" > .env
-echo "tavilyApiKey=your-tavily-key" >> .env
-echo "Ollama_api_key=your-ollama-key" >> .env
-echo "LANGSMITH_API_KEY=your-langsmith-key" >> .env
-
-```
-
-## Usage
-
-### CLI Mode
-```bash
-python withoutUi.py
-```
-
-### Web UI (Streamlit)
-```bash
-streamlit run Ui.py
-```
-
-### Prompt Evaluation
-```bash
-python prompt_evaluation.py
-```
-
-### LangGraph Studio
-```bash
-langgraph dev
-```
-Then open `http://localhost:2024` in your browser.
+---
 
 ## Project Structure
 
 ```
-PythonProject6/
- ├── Ui.py                       # Streamlit web UI + separate graph
- ├── withoutUi.py                # CLI entry point
- ├── agents.py                   # Agent definitions, tools, prompts, RAG setup
- ├── workflows.py                # LangGraph workflow graph
- ├── prompt_evaluation.py        # A/B/C prompt testing
- ├── prompt_evaluation_results.json  # Evaluation results
- ├── langgraph.json              # LangGraph Studio configuration
- ├── requirements.txt            # Python dependencies (pinned versions)
- ├── .env                        # Environment variables
- ├── files/
- │   ├── Grammer.pdf             # Grammar knowledge base (RAG source)
- │   └── saved_corrections_*.txt # Persisted user corrections
- └── README.md
+Projet_SMA/
+├── agents.py                       # Agent definitions, tools, prompts, RAG setup
+├── workflows.py                    # LangGraph workflow graph (CLI mode)
+├── Ui.py                           # Streamlit web interface
+├── withoutUi.py                    # CLI entry point
+├── prompt_evaluation.py            # A/B/C prompt testing framework
+├── prompt_evaluation_results.json  # Latest evaluation results
+├── langgraph.json                  # LangGraph Studio configuration
+├── requirements.txt                # Python dependencies
+├── .env                            # Environment variables (not committed)
+└── files/
+    ├── Grammer.pdf                 # Grammar knowledge base (RAG source)
+    └── saved_corrections_*.txt     # Persisted user sessions
 ```
 
-## Requirements
+---
 
-- Python 3.10+
-- Ollama running locally or remotely
-- Tavily API key
-- All dependencies listed in `requirements.txt`
+## Installation
+
+**Requirements:** Python 3.10+, pip
+
+```bash
+# 1. Install dependencies
+pip install -r requirements.txt
+
+# 2. Create .env with your credentials
+MODELNAME=your-ollama-model-name
+TAVILYAPIKEY=your-tavily-api-key
+OLLAMA_API_KEY=your-ollama-bearer-token
+LANGSMITH_API_KEY=your-langsmith-key   # optional
+```
+
+---
+
+## Usage
+
+### Web Interface (recommended)
+
+```bash
+streamlit run Ui.py
+```
+
+Open `http://localhost:8501` in your browser.
+
+### CLI Mode
+
+```bash
+python withoutUi.py
+```
+
+| Command | Action |
+|---|---|
+| `new` | Generate a new scenario |
+| `quit` | Exit the session |
+
+### Prompt Evaluation
+
+```bash
+python prompt_evaluation.py
+```
+
+Compares three prompt versions across 10 test sentences and exports results to `prompt_evaluation_results.json`.
+
+### LangGraph Studio
+
+```bash
+langgraph dev
+```
+
+Open `http://localhost:2024` to visualise and debug the agent graph.
+
+---
+
+## Environment Variables
+
+| Variable | Description |
+|---|---|
+| `modelName` | Ollama model name (e.g. `llama3`) |
+| `tavilyApiKey` | Tavily API key for web search |
+| `Ollama_api_key` | Bearer token for the Ollama endpoint |
+| `LANGSMITH_API_KEY` | LangSmith tracing key (optional) |
