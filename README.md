@@ -84,37 +84,37 @@ Agents clés : `situational`, `character`, `teacher`, `mentality`, `styler`, `sa
 Ci‑dessous les captures disponibles dans le répertoire `picture/` avec une brève description.
 
 - Interface principale — vue générale annotée
-  ![Interface principale](<picture/Interface principale — vue générale annotée .png>)
+  ![Interface principale](picture/interface-principale-vue-generale-annotee.png)
 
 - Barre latérale — détail des contrôles
-  ![Barre latérale — détail des contrôles](<picture/Barre latérale — détail des contrôles.png>)
+  ![Barre latérale — détail des contrôles](picture/barre-laterale-detail-des-controles.png)
 
 - Page de connexion — onglets Sign In et Create Account
-  ![Page de connexion](<picture/Page de connexion — onglets Sign In et Create Account.png>)
+  ![Page de connexion](picture/page-de-connexion-signin-create-account.png)
 
 - Écran d'inscription — formulaire Create Account
-  ![Écran d'inscription](<picture/Écran d'inscription — formulaire Create Account.png>)
+  ![Écran d'inscription](picture/ecran-inscription-create-account.png)
 
 - Page profil — statistiques et historique des erreurs grammaticales
-  ![Page profil](<picture/Page de profil — statistiques et historique des erreurs grammaticales .png>)
+  ![Page profil](picture/page-profil-statistiques-historique-erreurs-grammaticales.png)
 
 - Scénario généré — Exemple: Informatique Intermédiaire Français
-  ![Scénario généré](<picture/Scénario généré — Informatique Intermédiaire Français .png>)
+  ![Scénario généré](picture/scenario-genere-informatique-intermediaire-francais.png)
 
 - Échange de conversation avec corrections — domaine Informatique
-  ![Échange de conversation](<picture/Échange de conversation avec corrections — domaine Informatique.png>)
+  ![Échange de conversation](picture/echange-conversation-corrections-informatique.png)
 
 - Composition du SMA — 5 agents spécialisés et leurs interactions
-  ![Composition du SMA](<picture/Composition du SMA — 5 agents spécialisés et leurs interactions.png>)
+  ![Composition du SMA](picture/composition-sma-5-agents-interactions.png)
 
 - Pipeline de l'Agent Enseignant — RAG avec BM25 sur PDF de grammaire
-  ![Pipeline de l'Agent Enseignant](<picture/Pipeline de l'Agent Enseignant — RAG avec BM25 sur PDF de grammaire .png>)
+  ![Pipeline de l'Agent Enseignant](picture/pipeline-agent-enseignant-rag-bm25-pdf-grammaire.png)
 
 - Diagramme de flux des agents — traitement d'un message
-  ![Diagramme de flux des agents](<picture/— Diagramme de flux des agents — traitement d'un message .png>)
+  ![Diagramme de flux des agents](picture/diagramme-flux-agents-traitement-message.png)
 
 - Architecture globale du système SMA
-  ![Architecture globale du système SMA](<picture/Architecture globale du système SMA .png>)
+  ![Architecture globale du système SMA](picture/architecture-globale-du-systeme-sma.png)
 
 ---
 
