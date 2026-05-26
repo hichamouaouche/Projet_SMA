@@ -1,29 +1,86 @@
-# Projet SMA — Système Multi‑Agents pour l'apprentissage des langues
+# Projet SMA — Systeme Multi‑Agents pour l'apprentissage des langues
 
-Plateforme d'apprentissage des langues basée sur un système multi‑agents. Le projet génère des scénarios de conversation, corrige la grammaire via RAG, vérifie la pertinence culturelle et formate la réponse finale. Une interface Web Streamlit et un mode CLI sont disponibles.
+Ce projet propose une plateforme d'apprentissage des langues basee sur une architecture multi‑agents. L'objectif est de placer l'apprenant dans des situations de conversation realistes, d'ameliorer sa production ecrite et de fournir des corrections argumentees par des sources grammaticales. L'ensemble du flux est orchestre par LangGraph et propose une interface Web Streamlit ainsi qu'un mode CLI.
 
 ---
 
-## Fonctionnalités
+## Resume executif
+
+Le systeme genere un scenario, produit une reponse humaine, corrige la grammaire via un pipeline RAG, verifie la pertinence culturelle et formate une reponse pedagogique. Il s'appuie sur une base documentaire (PDF de grammaire) et sur des outils externes (LLM, recherche web) pour fournir une experience d'apprentissage guidee.
+
+---
+
+## Contexte et problematique
+
+L'apprentissage des langues souffre souvent d'un manque de feedback immediat, coherent et explique. Les apprenants ont besoin de corrections claires, de reformulations naturelles et d'un contexte de dialogue pour progresser. Ce projet vise a automatiser ces taches tout en conservant un cadre pedagogique.
+
+---
+
+## Objectifs
+
+- Simuler des conversations realistes adaptees au niveau de l'apprenant
+- Corriger et expliquer les erreurs grammaticales via RAG
+- Controler la pertinence culturelle et le ton
+- Produire une sortie claire, structuree et pedagogique
+- Permettre une evaluation des prompts pour stabiliser la qualite
+
+---
+
+## Fonctionnalites principales
 
 - Orchestration multi‑agents (LangGraph)
 - Correction grammaticale via RAG (BM25 sur `files/Grammer.pdf`)
-- Vérification culturelle et reformulation stylistique
+- Verification culturelle et reformulation stylistique
 - Sauvegarde des corrections (mode CLI)
 - Interface Web Streamlit + interface CLI
-- Évaluation de prompts (A/B/C)
+- Evaluation de prompts (A/B/C)
+
+---
+
+## Architecture du systeme
+
+Flux principal : scenario -> `character` -> `teacher` (RAG) -> `mentality` -> `styler` -> `save_check` -> `save_agent`.
+
+Roles :
+
+- `situational` : genere un contexte de conversation (theme, niveau, roles)
+- `character` : produit la reponse dans le role cible
+- `teacher` : corrige la grammaire avec RAG
+- `mentality` : verifie le registre et les risques culturels
+- `styler` : met en forme la reponse finale et la rend pedagogique
+- `save_agent` : sauvegarde les corrections si validees
+
+---
+
+## RAG (Retrieval‑Augmented Generation)
+
+- Source : `files/Grammer.pdf`
+- Indexation : BM25
+- Objectif : recuperer des regles pertinentes pour justifier les corrections
+
+Le pipeline RAG isole des passages utiles a la correction afin de renforcer la justesse et la transparence des reponses. Pour ameliorer la qualite, il est conseille d'enrichir le PDF avec des sections explicites et bien structurees.
+
+---
+
+## Flux utilisateur
+
+1. L'utilisateur lance un scenario (web ou CLI)
+2. Le systeme genere une reponse dans le role
+3. La reponse est corrigee et justifiee
+4. La sortie finale est formatee et proposee a l'utilisateur
+5. En CLI, l'utilisateur decide de sauvegarder ou non la correction
 
 ---
 
 ## Installation
 
-Pré‑requis : Python 3.10+ et `pip`.
+Pre‑requis : Python 3.10+ et `pip`.
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Créer un fichier `.env` à la racine :
+Creer un fichier `.env` a la racine :
 
 ```
 MODELNAME=your-ollama-model
@@ -36,7 +93,7 @@ LANGSMITH_API_KEY=optional
 
 ## Lancer l'application
 
-Web (recommandé) :
+Web (recommande) :
 
 ```bash
 streamlit run Ui.py
@@ -48,7 +105,7 @@ CLI :
 python withoutUi.py
 ```
 
-Évaluation de prompts :
+Evaluation de prompts :
 
 ```bash
 python prompt_evaluation.py
@@ -63,53 +120,46 @@ python prompt_evaluation.py
 - `Ui.py` — UI Streamlit
 - `withoutUi.py` — CLI
 - `prompt_evaluation.py` — Evaluation A/B/C
+- `prompt_evaluation_results.json` — Resultats des evaluations
 - `files/Grammer.pdf` — Base RAG
-- `picture/` — Captures d'ecran
 
 ---
 
-## Architecture (resume)
+## Donnees generees
 
-Flux principal : scenario -> `character` -> `teacher` (RAG) -> `mentality` -> `styler` -> `save_check` -> `save_agent`.
+- `prompt_evaluation_results.json` : rapports de comparaison de prompts
+- `saved_corrections_*.txt` : sauvegardes de sessions (mode CLI)
 
 ---
 
-## Captures d'ecran
+## Evaluation et qualite
 
-Les images ci‑dessous viennent du dossier `picture/`.
+Le module `prompt_evaluation.py` compare plusieurs variantes de prompts sur un jeu de phrases. Les resultats sont exportes en JSON afin d'identifier la variante la plus stable. Cette etape aide a reduire les regressions de qualite lors des evolutions.
 
-- Interface principale — vue generale annotee
-  ![Interface principale](picture/interface%20principale.png)
+---
 
-- Barre laterale — detail des controles
-  ![Barre laterale — detail des controles](picture/des%20controles.png)
+## Limites connues
 
-- Page de connexion — onglets Sign In et Create Account
-  ![Page de connexion](picture/page%20connexion.png)
+- Depend de la qualite du PDF grammatical
+- Variabilite des sorties LLM selon le modele et le contexte
+- Couverture culturelle limitee si la recherche web est indisponible
 
-- Ecran d'inscription — formulaire Create Account
-  ![Ecran d'inscription](picture/inscription%20formulaire.png)
+---
 
-- Page profil — statistiques et historique des erreurs grammaticales
-  ![Page profil](picture/page%20profil.png)
+## Pistes d'amelioration
 
-- Scenario genere — Exemple: Informatique Intermediaire Francais
-  ![Scenario genere](picture/scenario.png)
+- Ajouter des tests automatiques sur un corpus fixe
+- Enrichir la base RAG avec plusieurs sources et metadonnees
+- Ajouter des statistiques par utilisateur et un suivi de progression
+- Internationaliser l'interface et les scenarios
 
-- Echange de conversation avec corrections — domaine Informatique
-  ![Echange de conversation](picture/echange.png)
+---
 
-- Composition du SMA — 5 agents specialises et leurs interactions
-  ![Composition du SMA](picture/composition%20SMA.png)
+## Depannage rapide
 
-- Pipeline de l'Agent Enseignant — RAG avec BM25 sur PDF de grammaire
-  ![Pipeline de l'Agent Enseignant](picture/pipeline.png)
-
-- Diagramme de flux des agents — traitement d'un message
-  ![Diagramme de flux des agents](picture/diagramme.png)
-
-- Architecture globale du systeme SMA
-  ![Architecture globale du systeme SMA](picture/architecture.png)
+- Si `teacher` ne corrige pas : verifier `files/Grammer.pdf`
+- Si l'UI ne demarre pas : verifier le port (8501 par defaut)
+- Si l'API ne repond pas : verifier `.env`
 
 ---
 
