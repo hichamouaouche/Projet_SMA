@@ -84,38 +84,37 @@ Agents clés : `situational`, `character`, `teacher`, `mentality`, `styler`, `sa
 Ci‑dessous les captures disponibles dans le répertoire `picture/` avec une brève description.
 
 - Interface principale — vue générale annotée
- - Interface principale — vue générale annotée
-  ![Interface principale](<picture/interface principale.png>)
+  ![Interface principale](picture/interface%20principale.png)
 
  - Barre latérale — détail des contrôles
-  ![Barre latérale — détail des contrôles](<picture/des controles.png>)
+  ![Barre latérale — détail des contrôles](picture/des%20controles.png)
 
  - Page de connexion — onglets Sign In et Create Account
-  ![Page de connexion](<picture/page connexion.png>)
+  ![Page de connexion](picture/page%20connexion.png)
 
  - Écran d'inscription — formulaire Create Account
-  ![Écran d'inscription](<picture/inscription formulaire.png>)
+  ![Écran d'inscription](picture/inscription%20formulaire.png)
 
  - Page profil — statistiques et historique des erreurs grammaticales
-  ![Page profil](<picture/page profil.png>)
+  ![Page profil](picture/page%20profil.png)
 
  - Scénario généré — Exemple: Informatique Intermédiaire Français
-  ![Scénario généré](<picture/scenario.png>)
+  ![Scénario généré](picture/scenario.png)
 
  - Échange de conversation avec corrections — domaine Informatique
-  ![Échange de conversation](<picture/echange.png>)
+  ![Échange de conversation](picture/echange.png)
 
  - Composition du SMA — 5 agents spécialisés et leurs interactions
-  ![Composition du SMA](<picture/composition SMA.png>)
+  ![Composition du SMA](picture/composition%20SMA.png)
 
  - Pipeline de l'Agent Enseignant — RAG avec BM25 sur PDF de grammaire
-  ![Pipeline de l'Agent Enseignant](<picture/pipeline.png>)
+  ![Pipeline de l'Agent Enseignant](picture/pipeline.png)
 
  - Diagramme de flux des agents — traitement d'un message
-  ![Diagramme de flux des agents](<picture/diagramme.png>)
+  ![Diagramme de flux des agents](picture/diagramme.png)
 
  - Architecture globale du système SMA
-  ![Architecture globale du système SMA](<picture/architecture.png>)
+  ![Architecture globale du système SMA](picture/architecture.png)
 
 ---
 
